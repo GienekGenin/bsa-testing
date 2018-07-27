@@ -15,35 +15,49 @@ describe("CartParser validation method", () => {
         expect(validate(content)).toEqual([]);
     });
 
-    let wrongHeader = 'Product name,Price,Quantit\n' +
-        'Mollis consequat,9.00,2\n' +
-        'Tvoluptatem,10.32,1\n' +
-        'Scelerisque lacinia,18.90,1\n' +
-        'Consectetur adipiscing,28.72,10\n' +
-        'Condimentum aliquet,13.90,1';
 
-    let err = {
-        "column": 2,
-        "message": "Expected header to be named \"Quantity\" but received Quantit.",
-        "row": 0,
-        "type": "header",
-    };
+    it('Should return err if there is not expected header', () => {
 
-    it('Not expected name header in file.csv', () => {
+        // csv file content with wrong header
+        let wrongHeader = 'Product name,Price,Quantit\n' +
+            'Condimentum aliquet,13.90,1';
+
+        // err that should be expected
+        let err = {
+            "column": 2,
+            "message": "Expected header to be named \"Quantity\" but received Quantit.",
+            "row": 0,
+            "type": "header",
+        };
         expect(validate(wrongHeader)).toEqual([err]);
     });
-    //
+
+    it('Should return err if there is negative number', () => {
+        // content with negative number
+        let wrongContent = 'Product name,Price,Quantity\n' +
+            'Mollis consequat,9.00,-2';
+        // err that should be expected
+        let err = {
+            "column": 2,
+            "message": "Expected cell to be a positive number but received \"-2\".",
+            "row": 1,
+            "type": "cell",
+        };
+        expect(validate(wrongContent)).toEqual([err]);
+    });
+
     // it('Test appropriate amount of cells', () => {
-    //
+    //     let wrongContent = 'Product name,Price,Quantity\n' +
+    //         'Mollis consequat,9.00,-2';
+    //     expect(validate(wrongContent)).toEqual([]);
     // });
     //
     // it('Test cell is empty', () => {
     //
     // });
     //
-    // it('Negative number in cell', () => {
-    //
-    // });
+    // good one
+
 });
 
 describe("CartParser - integration tests", () => {
