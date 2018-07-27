@@ -58,12 +58,17 @@ describe("CartParser validation method tests", () => {
         expect(validate(wrongContent)).toEqual([err]);
     });
 
-    // it('Test cell is empty', () => {
-    //
-    // });
-    //
-    // good one
-
+    it('Should return err if there is empty cell string', () => {
+        let wrongContent = 'Product name,Price,Quantity\n' +
+            ',13.90,1';
+        let err = {
+            "column": 0,
+            "message": "Expected cell to be a nonempty string but received \"\".",
+            "row": 1,
+            "type": "cell",
+        };
+        expect(validate(wrongContent)).toEqual([err]);
+    });
 });
 
 describe("CartParser - integration tests", () => {
