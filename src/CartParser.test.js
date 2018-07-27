@@ -8,10 +8,10 @@ beforeEach(() => {
     content = parser.readFile('./samples/cart.csv');
 });
 
-describe("CartParser validation method", () => {
+describe("CartParser validation method tests", () => {
     // Add your unit tests here.
 
-    it('Should return [] if file.csv if a valid file', () => {
+    it('Should return [] of errors if file.csv if a valid file', () => {
         expect(validate(content)).toEqual([]);
     });
 
@@ -46,12 +46,18 @@ describe("CartParser validation method", () => {
         expect(validate(wrongContent)).toEqual([err]);
     });
 
-    // it('Test appropriate amount of cells', () => {
-    //     let wrongContent = 'Product name,Price,Quantity\n' +
-    //         'Mollis consequat,9.00,-2';
-    //     expect(validate(wrongContent)).toEqual([]);
-    // });
-    //
+    it('Should return err if there is not appropriate amount of cells', () => {
+        let wrongContent = 'Product name,Price,Quantity\n' +
+            'Mollis consequat,2';
+        let err = {
+            "column": -1,
+            "message": "Expected row to have 3 cells but received 2.",
+            "row": 1,
+            "type": "row",
+        };
+        expect(validate(wrongContent)).toEqual([err]);
+    });
+
     // it('Test cell is empty', () => {
     //
     // });
