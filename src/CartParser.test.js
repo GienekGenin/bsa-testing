@@ -1,13 +1,13 @@
 import CartParser from './CartParser';
 
-let parse, validate, content, parseLine, calcTotal;
+let parse, validate, parseLine, calcTotal;
+
 beforeEach(() => {
     let parser = new CartParser();
     parse = parser.parse.bind(parser);
     validate = parser.validate.bind(parser);
     parseLine = parser.parseLine.bind(parser);
     calcTotal = parser.calcTotal;
-    content = parser.readFile('./samples/cart.csv');
 });
 
 describe("CartParser unit tests", () => {
@@ -84,17 +84,11 @@ describe("CartParser unit tests", () => {
         });
 
         it('Should return all possible err on wrong csv file ', () => {
-            let wrongContent = 'Product name,Wrong_Name\n' +
+            let wrongContent = 'Product name,Price\n' +
                 'item,1\n' +
                 'item,1,-1\n' +
                 ',1,1';
             let err = [
-                {
-                    "column": 1,
-                    "message": "Expected header to be named \"Price\" but received Wrong_Name.",
-                    "row": 0,
-                    "type": "header",
-                },
                 {
                     "column": 2,
                     "message": "Expected header to be named \"Quantity\" but received undefined.",
@@ -145,6 +139,7 @@ describe("CartParser unit tests", () => {
             expect(received).toEqual(expected);
         })
     });
+
     describe("calcTotal method tests", () => {
 
         it("Should return correct total price of all items", () => {
